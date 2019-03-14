@@ -1,0 +1,8 @@
+CREATE TABLE MODO_PAGO(
+
+id_modo_pago int NOT NULL,
+
+nombre_pago varchar(30) not null,
+
+PRIMARY KEY (id_modo_pago)
+);

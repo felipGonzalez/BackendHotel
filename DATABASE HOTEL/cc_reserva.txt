@@ -1,0 +1,16 @@
+alter table reservas 
+
+ADD(
+
+CONSTRAINT RES_UQ_IDR UNIQUE(id_reserva), 
+
+CONSTRAINT RES_FK_IDC foreign key (id_cliente) 
+references
+clientes(id_cliente),
+
+CONSTRAINT RES_FK_IDM foreign key (id_modo_pago) 
+references
+ modo_pago(id_modo_pago),
+
+CONSTRAINT RES_CK_EST CHECK (estado_reserva IN ('P'/*pendiente*/,'A'/*Activa*/,'t'/*terminada*/))
+);

@@ -1,0 +1,3 @@
+alter table BUZON 
+
+ADD unique(id_mensaje);

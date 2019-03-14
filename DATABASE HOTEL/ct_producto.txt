@@ -1,0 +1,17 @@
+CREATE TABLE PRODUCTOS(
+
+
+id_producto int NOT NULL,
+
+id_categoria int NOT NULL,
+
+nombre_producto varchar(30) not null,
+
+descripcion_producto varchar(30) not null,
+
+cantidad_actual int not null,
+
+cantidad_base  int not null,
+
+PRIMARY KEY (id_producto)
+);

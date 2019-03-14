@@ -1,0 +1,14 @@
+CREATE TABLE CATEGORIA_PRODUCTO(
+
+
+id_categoria int NOT NULL,
+
+
+nombre_categoria varchar(30) not null,
+
+
+descripcion_categoria varchar(100) not null,
+
+
+PRIMARY KEY (id_categoria)
+);

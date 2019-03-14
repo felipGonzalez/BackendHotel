@@ -1,0 +1,9 @@
+CREATE TABLE HABITACIONES(
+
+id_habitacion int NOT NULL,
+
+codigo varchar(10) NOT NULL,
+
+estado_habitacion char not null, 
+PRIMARY KEY (id_habitacion)
+);

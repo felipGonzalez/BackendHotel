@@ -1,0 +1,7 @@
+alter table categoria_producto
+ 
+ADD(
+
+CONSTRAINT CAT_UQ_IDC UNIQUE(id_categoria)
+
+);

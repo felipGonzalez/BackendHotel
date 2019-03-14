@@ -1,0 +1,13 @@
+CREATE TABLE PROVEEDORES(
+
+id_proveedor int NOT NULL,
+
+nombre_proveedor varchar(30) not null,
+
+nit_proveedor varchar(15) not null,
+
+ciudad_proveedor varchar(30) not null,
+
+telefono varchar(15) not null, 
+PRIMARY KEY (id_proveedor)
+);

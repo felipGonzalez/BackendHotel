@@ -1,0 +1,26 @@
+alter table DETALLE_RESERVA 
+
+
+ADD(
+
+
+CONSTRAINT DER_UQ_IDR UNIQUE(id_det_reserva),
+
+
+CONSTRAINT RES_FK_IDR foreign key (id_reserva) 
+references
+
+reservas(id_reserva),
+
+
+CONSTRAINT RES_FK_ICA foreign key (id_cama) 
+references
+
+camas(id_cama),
+
+
+CONSTRAINT RES_CK_DAT CHECK (fecha_final >fecha_inicial),
+
+CONSTRAINT RES_CK_TIP CHECK (tipo_reserva IN ('P'/*privada*/,'C'/*compartida*/))
+
+);

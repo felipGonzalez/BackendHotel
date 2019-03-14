@@ -1,0 +1,10 @@
+CREATE TABLE HABITACION_ARTICULO(
+
+id_producto int NOT NULL,
+
+id_habitacion int NOT NULL,
+
+cantidad_producto INT NOT NULL,
+
+PRIMARY KEY (id_habitacion, id_producto)
+);

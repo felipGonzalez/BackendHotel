@@ -1,0 +1,12 @@
+CREATE TABLE CAMAS(
+
+id_cama int NOT NULL,
+
+id_habitacion int NOT NULL,
+
+precio_cama int NOT NULL,
+
+codigo_cama varchar(10) NOT NULL,
+
+PRIMARY KEY (id_cama)
+);

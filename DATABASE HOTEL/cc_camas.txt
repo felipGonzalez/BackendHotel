@@ -1,0 +1,17 @@
+alter table camas 
+
+
+ADD(
+
+
+CONSTRAINT CAM_UQ_IDS UNIQUE(id_cama),
+ 
+
+CONSTRAINT CAM_FK_IDH foreign key (id_habitacion) 
+references
+
+habitaciones(id_habitacion),
+
+CONSTRAINT CAM_CK_PRE CHECK (precio_cama>0)
+
+);

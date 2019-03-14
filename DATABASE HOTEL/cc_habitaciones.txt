@@ -1,0 +1,12 @@
+alter table habitaciones 
+
+
+ADD(
+
+
+CONSTRAINT HAB_UQ_IDH UNIQUE(id_habitacion),
+ 
+CONSTRAINT HAB_CK_ESH CHECK (estado_habitacion IN ('D'/*disponible*/,'O'/*Ocupada*/,'R'/*Reservada*/))
+
+
+);

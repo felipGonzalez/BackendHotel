@@ -1,0 +1,7 @@
+alter table proveedores 
+
+ADD(
+
+CONSTRAINT PRO_UQ_IDP UNIQUE(id_proveedor)
+
+);

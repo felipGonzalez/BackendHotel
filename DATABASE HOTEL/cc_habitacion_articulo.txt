@@ -1,0 +1,17 @@
+alter table HABITACION_ARTICULO 
+
+
+ADD(
+
+
+CONSTRAINT HAA_FK_IDH foreign key(id_habitacion) 
+
+references habitaciones(id_habitacion),
+
+CONSTRAINT HAA_FK_IDP foreign key(id_producto) 
+
+references productos(id_producto),
+
+CONSTRAINT HAA_CK_CAN CHECK (cantidad_producto>0)
+
+);

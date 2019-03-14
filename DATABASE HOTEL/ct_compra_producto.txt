@@ -1,0 +1,12 @@
+CREATE TABLE COMPRA_PRODUCTO(
+
+id_producto int NOT NULL,
+
+id_compra int NOT NULL,
+
+cantidad INT NOT NULL,
+
+precio_producto INT NOT NULL,
+
+PRIMARY KEY (id_compra, id_producto)
+);

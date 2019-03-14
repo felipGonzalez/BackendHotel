@@ -1,0 +1,13 @@
+CREATE TABLE CLIENTES(
+id_cliente int NOT NULL,
+id_tipo_documento int NOT NULL,
+documento_cliente varchar(30) not null,
+nombre_cliente varchar(30) not null,
+apellido_cliente varchar(30) not null,
+genero varchar(20),
+telefono varchar(20) not null,
+ciudad varchar(30) not null,
+email varchar(60) not null,
+contrasena varchar(256) not null,
+PRIMARY KEY (id_cliente)
+);

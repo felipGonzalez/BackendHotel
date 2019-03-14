@@ -1,0 +1,10 @@
+alter table CLIENTES 
+
+ADD(
+
+CONSTRAINT CLI_UQ_IDC UNIQUE(id_cliente),
+ 
+CONSTRAINT CLI_FK_IDT foreign key (id_tipo_documento) references 
+
+tipo_documento(id_tipo_documento)
+);

@@ -1,0 +1,12 @@
+CREATE TABLE COMPRAS(
+
+id_compra int NOT NULL,
+
+id_proveedor int NOT NULL,
+
+fecha_compra DATE NOT NULL,
+
+total INT NOT NULL,
+
+PRIMARY KEY (id_compra)
+);

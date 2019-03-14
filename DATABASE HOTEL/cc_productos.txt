@@ -1,0 +1,17 @@
+alter table productos
+
+
+ADD(
+
+CONSTRAINT PRO_UQ_IDP  UNIQUE (id_producto),
+
+CONSTRAINT PRO_FK_IDC foreign key(id_categoria) 
+
+references categoria_producto(id_categoria),
+
+CONSTRAINT PRO_CK_CAA CHECK (cantidad_actual>0),
+
+CONSTRAINT PRO_CK_CAB CHECK (cantidad_base>0), 
+
+CONSTRAINT PRO_CK_DIF CHECK (cantidad_actual>cantidad_base)
+);

@@ -1,0 +1,12 @@
+alter table compras
+
+
+ADD(
+CONSTRAINT COM_UQ_IDC unique (id_compra),
+
+CONSTRAINT COM_FK_IDP foreign key(id_proveedor) 
+
+references proveedores(id_proveedor),
+
+CONSTRAINT COM_CK_TOT CHECK (total>0)
+);

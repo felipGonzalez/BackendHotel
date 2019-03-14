@@ -1,0 +1,14 @@
+CREATE TABLE BUZON(
+
+id_mensaje int NOT NULL,
+
+nombre_remitente varchar(30) not null,
+
+apellido_remitente varchar(30) not null,
+
+email varchar(60) not null,
+
+mensaje varchar(256) not null,
+
+PRIMARY KEY (id_mensaje)
+);

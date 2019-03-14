@@ -1,0 +1,14 @@
+CREATE TABLE RESERVAS(
+
+id_reserva int NOT NULL,
+
+id_cliente int NOT NULL,
+
+id_modo_pago int NOT NULL,
+
+fecha_reserva DATE NOT NULL,
+
+estado_reserva char NOT NULL,
+
+PRIMARY KEY (id_reserva)
+);

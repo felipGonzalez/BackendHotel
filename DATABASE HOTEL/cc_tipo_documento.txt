@@ -1,0 +1,9 @@
+alter table TIPO_DOCUMENTO 
+
+ADD(
+
+CONSTRAINT TIP_UQ_IDT UNIQUE(id_tipo_documento),
+
+CONSTRAINT TIP_UQ_NOM UNIQUE(nombre_tipo)
+
+);

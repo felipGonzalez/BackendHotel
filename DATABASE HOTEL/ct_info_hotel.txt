@@ -1,0 +1,11 @@
+CREATE TABLE INFO_HOTEL(
+nombre_hotel varchar(30) NOT NULL,
+telefono_hotel varchar(15) NOT NULL,
+email_hotel varchar(50) not null,
+razon_social varchar(30),
+nif varchar(30),
+departamento_hotel varchar(30) NOT NULL,
+municipio_hotel varchar(30) NOT NULL,
+direccion_hotel varchar(30) NOT NULL
+);
+

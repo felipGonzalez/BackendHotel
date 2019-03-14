@@ -1,0 +1,17 @@
+alter table compra_producto
+
+
+ADD(
+
+CONSTRAINT COP_FK_IDP foreign key(id_producto) 
+
+references productos(id_producto),
+
+CONSTRAINT COP_FK_IDC foreign key(id_compra) 
+
+references compras(id_compra),
+
+CONSTRAINT COP_CK_CAP CHECK (cantidad_producto>0),
+
+CONSTRAINT COP_CK_PRP CHECK (precio_producto>0)
+);

@@ -1,0 +1,8 @@
+alter table modo_pago 
+
+ADD(
+CONSTRAINT MOP_UQ_IDM UNIQUE(id_modo_pago),
+
+CONSTRAINT MOP_UQ_NOP UNIQUE(nombre_pago)
+
+);

@@ -1,0 +1,8 @@
+CREATE TABLE TIPO_DOCUMENTO(
+
+id_tipo_documento int NOT NULL,
+
+nombre_tipo varchar(30) not null,
+
+PRIMARY KEY (id_tipo_documento)
+);
