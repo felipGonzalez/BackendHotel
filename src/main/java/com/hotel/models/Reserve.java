@@ -26,7 +26,7 @@ public class Reserve {
 	private Integer idClient;
 	
 	@Column(name="fecha_reserva", nullable=false)
-	private String dateReserve;
+	private Date dateReserve;
 	
 	@Column(name="id_estado_reserva", nullable=false,length=1)
 	private Integer idStateReserve;
@@ -35,10 +35,10 @@ public class Reserve {
 	private Integer idBill;
 
 	@Column(name="fecha_inicial", nullable=false)
-	private String deteInput;
+	private Date deteInput;
 	
 	@Column(name="fecha_final", nullable=false)
-	private String dateOutput;
+	private Date dateOutput;
 	
 
 	@Column(name="id_tipo_reserva", nullable=false,length=4 )
@@ -70,11 +70,11 @@ public class Reserve {
 		this.idClient = idClient;
 	}
 
-	public String getDateReserve() {
+	public Date getDateReserve() {
 		return dateReserve;
 	}
 
-	public void setDateReserve(String dateReserve) {
+	public void setDateReserve(Date dateReserve) {
 		this.dateReserve = dateReserve;
 	}
 
@@ -94,19 +94,19 @@ public class Reserve {
 		this.idBill = idBill;
 	}
 
-	public String getDeteInput() {
+	public Date getDeteInput() {
 		return deteInput;
 	}
 
-	public void setDeteInput(String deteInput) {
+	public void setDeteInput(Date deteInput) {
 		this.deteInput = deteInput;
 	}
 
-	public String getDateOutput() {
+	public Date getDateOutput() {
 		return dateOutput;
 	}
 
-	public void setDateOutput(String dateOutput) {
+	public void setDateOutput(Date dateOutput) {
 		this.dateOutput = dateOutput;
 	}
 

@@ -175,15 +175,15 @@ public class ReserveController {
 
 	@PostMapping(value="")
 	public RestResponse create(@RequestBody Reserve reserva) {
+		System.out.println(reserva.getDateReserve());
+		System.out.println(reserva.getDeteInput());
+		System.out.println(reserva.getDateOutput());
 		if(reserva.getIdStateReserve() == null) {
 			Bill bill= new Bill(billService.getIdCount(), reserva.getDateReserve());
 			reserva.setIdBill(bill.getId());
 			reserva.setIdStateReserve(1);
 			billService.save(bill);
 		}
-		System.out.println(reserva.getDateReserve());
-		System.out.println(reserva.getDeteInput());
-		System.out.println(reserva.getDateOutput());
 		reservaService.save(reserva);
 		return new RestResponse(HttpStatus.OK.value(), "Operacion exitosa");
 	}

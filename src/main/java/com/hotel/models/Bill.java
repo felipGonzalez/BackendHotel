@@ -21,12 +21,12 @@ public class Bill {
 	private Integer id;
 
 	@Column(name="FECHA_FACTURA",  nullable=false,length=30 )
-	private String dateBill;
+	private Date dateBill;
 
 	public Bill() {
 	}
 	
-	public Bill(Integer id, String dateBill) {
+	public Bill(Integer id, Date dateBill) {
 		this.id = id;
 		this.dateBill = dateBill;
 	}
@@ -39,11 +39,11 @@ public class Bill {
 		this.id = id;
 	}
 
-	public String getDateBill() {
+	public Date getDateBill() {
 		return dateBill;
 	}
 
-	public void setDateBill(String dateBill) {
+	public void setDateBill(Date dateBill) {
 		this.dateBill = dateBill;
 	}
 
