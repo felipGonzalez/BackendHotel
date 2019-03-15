@@ -123,9 +123,15 @@ public class ReservaService {
 	}
 	
 
+	/*Reservas sin asingar*/
+	public List<Reserve> getReserveNotAssign() {
+		return reservaRepository.findReserveNotAssign();
+	}	
+	
+	
 
-
-
+	
+	
 
 
 

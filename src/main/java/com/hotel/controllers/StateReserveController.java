@@ -14,7 +14,7 @@ import com.hotel.util.Const;
 
 @RestController
 @RequestMapping("/listStateReserve")
-@CrossOrigin(origins = Const.DOMAIN)
+@CrossOrigin(origins = {Const.DOMAIN,Const.DOMAIN2})
 public class StateReserveController {
 
 	@Autowired

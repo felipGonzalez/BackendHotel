@@ -15,7 +15,6 @@ import org.springframework.data.annotation.AccessType.Type;
 @Entity
 @Table(name="compras")
 @AccessType(Type.FIELD)
-
 public class Buy {
 
 	@Id

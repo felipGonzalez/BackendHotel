@@ -1,9 +1,5 @@
 package com.hotel.controllers;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,11 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.hotel.models.Bill;
+import com.hotel.models.DetailReserve;
 import com.hotel.models.Reserve;
 import com.hotel.models.Room;
 
 
 import com.hotel.service.BillService;
+import com.hotel.service.DetailReserveService;
 import com.hotel.service.ReservaService;
 import com.hotel.service.RoomService;
 import com.hotel.util.Const;
@@ -35,13 +32,16 @@ import com.hotel.util.RestResponse;
 
 @RestController
 @RequestMapping("/listReserve")
-@CrossOrigin(origins = Const.DOMAIN)
+@CrossOrigin(origins = {Const.DOMAIN,Const.DOMAIN2})
 public class ReserveController {
 
 	@Autowired
 	private ReservaService reservaService;
 	@Autowired
 	private RoomService roomService;
+	
+	@Autowired
+	private DetailReserveService detailReserveService;
 
 	@Autowired
 	private BillService billService;
@@ -57,6 +57,11 @@ public class ReserveController {
 	@GetMapping(value="reserveActually")
 	public List<Reserve> getListActally(){
 		return reservaService.getAllActually();
+	}
+	
+	@GetMapping(value="reserveNotAssign")
+	public List<Reserve> getReserveNotAssign(){
+		return reservaService.getReserveNotAssign();
 	}
 
 	@GetMapping(value="userEstancia")
@@ -185,6 +190,12 @@ public class ReserveController {
 			billService.save(bill);
 		}
 		reservaService.save(reserva);
+		return new RestResponse(HttpStatus.OK.value(), "Operacion exitosa");
+	}
+	
+	@PostMapping(value="/detailReserve")
+	public RestResponse create(@RequestBody DetailReserve detailReserve) {
+		detailReserveService.save(detailReserve);
 		return new RestResponse(HttpStatus.OK.value(), "Operacion exitosa");
 	}
 

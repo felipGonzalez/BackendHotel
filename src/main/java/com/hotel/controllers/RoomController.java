@@ -22,8 +22,7 @@ import com.hotel.util.RestResponse;
 
 @RestController
 @RequestMapping("/listRoom")
-@CrossOrigin(origins = Const.DOMAIN)
-
+@CrossOrigin(origins = {Const.DOMAIN,Const.DOMAIN2})
 public class RoomController {
 	
 	@Autowired

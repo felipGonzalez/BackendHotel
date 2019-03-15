@@ -16,7 +16,7 @@ import com.hotel.util.Const;
 
 @RestController
 @RequestMapping("/listCategoryProduct")
-@CrossOrigin(origins = Const.DOMAIN)
+@CrossOrigin(origins = {Const.DOMAIN,Const.DOMAIN2})
 public class CategoryProductController {
 	
 	@Autowired
