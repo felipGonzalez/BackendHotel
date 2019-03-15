@@ -76,8 +76,22 @@ public class UserController {
 
 		return new RestResponse(HttpStatus.OK.value(), "Operacion exitosa");
 	}
+	
+	private void trimString(User user) {
+		if(user.getPassword() != null || !user.getPassword().isEmpty()) {
+			user.setPassword(user.getPassword().trim());
+			user.setPassword(user.getPassword().replace(" ", ""));
+		}
+		
+		if(user.getEmail() != null || !user.getEmail().isEmpty()) {
+			user.setEmail(user.getEmail().trim());
+			user.setEmail(user.getEmail().replace(" ", ""));
+		}
+	}
 
 	private boolean validateUser(User user) {
+		System.out.println("Entro al validar");
+		trimString(user);
 		return (!validateName(user.getFirstName()) || 
 				!validateName(user.getLastName()));
 	}
