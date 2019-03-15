@@ -33,7 +33,8 @@ public class UserService {
 	 }
 	 
 	 public int verifyUser(String email, String password) throws Exception{
-		 return userRepository.findUser(email, password);
+		 System.out.println(userRepository.findUser(email, password));
+		 return userRepository.findUser(email.trim(), password.trim());
 	 }
 	 
 	 public Optional<User> getUser(Integer id) {

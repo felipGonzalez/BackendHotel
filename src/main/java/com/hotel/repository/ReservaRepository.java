@@ -197,15 +197,15 @@ public interface ReservaRepository extends JpaRepository<Reserve, Integer> {
 			"																	from reservas r, detalle_reserva dr\r\n" + 
 			"																	where r.id_reserva=dr.id_reserva\r\n" + 
 			"																	and id_tipo_reserva = 1\r\n" + 
-			"																	and (@fecha_ingreso_inicial between fecha_inicial and fecha_final\r\n" + 
-			"																	or @fecha_ingreso_final between fecha_inicial and fecha_final)\r\n" + 
+			"																	and (?1 between fecha_inicial and fecha_final\r\n" + 
+			"																	or ?2 between fecha_inicial and fecha_final)\r\n" + 
 			"																	and (id_estado_reserva = 1 or id_estado_reserva = 2))x\r\n" + 
 			"								on (ha.id_habitacion = x.id_habitacion)\r\n" + 
 			"								where id_estado_habitacion = 1)\r\n" + 
 			"	and dr.id_habitacion=h.id_habitacion\r\n" + 
 			"	and r.id_reserva=dr.id_reserva\r\n" + 
-			"	and (@fecha_ingreso_inicial between fecha_inicial and fecha_final\r\n" + 
-			"	or @fecha_ingreso_final between fecha_inicial and fecha_final)\r\n" + 
+			"	and (?1 between fecha_inicial and fecha_final\r\n" + 
+			"	or ?2 between fecha_inicial and fecha_final)\r\n" + 
 			"	group by h.id_habitacion) y\r\n" + 
 			"	on (h.id_habitacion = y.id_habitacion)\r\n" + 
 			"", nativeQuery = true)
