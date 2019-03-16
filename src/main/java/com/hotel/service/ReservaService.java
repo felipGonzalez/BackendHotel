@@ -134,7 +134,7 @@ public class ReservaService {
 	}
 	
 	/*Costo total a pagar  */
-	public  int  getCostTotal(int idReserve) {
+	public  Integer  getCostTotal(int idReserve) {
 		return reservaRepository.findCostTotal(idReserve);
 	}
 	

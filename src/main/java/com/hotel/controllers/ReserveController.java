@@ -148,7 +148,7 @@ public class ReserveController {
 	
 	/*Costo total a pagar  */
 	@GetMapping(value="costReserve/{idReserve}")
-	public  int  getCostTotal(@PathVariable int idReserve) {
+	public  Integer  getCostTotal(@PathVariable int idReserve) {
 		return reservaService.getCostTotal(idReserve);
 	}
 	
