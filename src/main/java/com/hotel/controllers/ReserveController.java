@@ -176,7 +176,12 @@ public class ReserveController {
 	@GetMapping(value="individualAvailabilityRoom")
 	@ResponseBody
 	public  int getIndividualAvailability(@RequestParam List<String> date){
-		return reservaService.getIndividualAvailability(date.get(0),date.get(1),Integer.parseInt(date.get(2)));
+		try {
+			return reservaService.getIndividualAvailability(date.get(0),date.get(1),Integer.parseInt(date.get(2)));
+		} catch (Exception e) {
+			return 0;
+		}
+		
 	}	
 	
 	@GetMapping(value="sharedAvailability") 
