@@ -145,6 +145,13 @@ public class ReserveController {
 		return reservaService.getAllActally(new Integer(2),"2019-03-07");
 	}
 	
+	
+	/*Costo total a pagar  */
+	@GetMapping(value="costReserve/{idReserve}")
+	public  int  getCostTotal(@PathVariable int idReserve) {
+		return reservaService.getCostTotal(idReserve);
+	}
+	
 	/*-----------Servicios pagina --------------------*/
 //	@GetMapping(value="ListSharedAvailableRoom/{id}")
 //	@ResponseBody
@@ -166,17 +173,17 @@ public class ReserveController {
 		return  reservaService.getReserveUser(id);
 	}	
 	
-	@GetMapping(value="individualAvailabilityRoom")  // fuera de servicio
+	@GetMapping(value="individualAvailabilityRoom")
 	@ResponseBody
 	public  int getIndividualAvailability(@RequestParam List<String> date){
 		return reservaService.getIndividualAvailability(date.get(0),date.get(1),Integer.parseInt(date.get(2)));
 	}	
 	
-	/*@GetMapping(value="sharedAvailability")  // fuera de servicio
+	@GetMapping(value="sharedAvailability") 
 	@ResponseBody
 	public  int getSharedAvailability(@RequestParam List<String> date){
 		return reservaService.getSharedAvailability(date.get(0),date.get(1));
-	}*/	
+	}
 
 	
 	
