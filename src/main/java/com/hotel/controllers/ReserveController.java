@@ -32,7 +32,7 @@ import com.hotel.util.RestResponse;
 
 @RestController
 @RequestMapping("/listReserve")
-@CrossOrigin(origins = {Const.DOMAIN,Const.DOMAIN2})
+@CrossOrigin(origins = {Const.DOMAIN,Const.DOMAIN2,Const.DOMAIN3})
 public class ReserveController {
 
 	@Autowired
@@ -167,7 +167,7 @@ public class ReserveController {
 //		return  reservaService.getReserveUser(0);
 //	}	
 	
-	@GetMapping(value="listSharedAvailableRoom/{id}")
+	@GetMapping(value="listHistoryReserveClient/{id}")
 	@ResponseBody
 	public  List<Map<String,Object>> getReserveUser(@PathVariable int id){
 		return  reservaService.getReserveUser(id);

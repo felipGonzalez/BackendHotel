@@ -22,7 +22,7 @@ import com.hotel.util.RestResponse;
 
 @RestController
 @RequestMapping("/listTypeReserve")
-@CrossOrigin(origins = {Const.DOMAIN,Const.DOMAIN2})
+@CrossOrigin(origins = {Const.DOMAIN,Const.DOMAIN2,Const.DOMAIN3})
 public class TypeReserveController {
 
 	
