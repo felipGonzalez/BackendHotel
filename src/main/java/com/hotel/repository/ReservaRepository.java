@@ -127,21 +127,21 @@ public interface ReservaRepository extends JpaRepository<Reserve, Integer> {
 	@Query(value = "select count(h.id_habitacion) cantidad \r\n" + 
 			"from habitaciones h \r\n" + 
 			" where h.id_habitacion not in(select dr.id_habitacion\r\n" + 
-			"									FROM RESERVAS R, DETALLE_RESERVA DR, habitaciones h\r\n" + 
-			"									WHERE R.ID_RESERVA = DR.ID_RESERVA\r\n" + 
+			"									from reservas r, detalle_reserva dr, habitaciones h\r\n" + 
+			"									where r.id_reserva = dr.id_reserva\r\n" + 
 			"									and dr.id_habitacion = h.id_habitacion\r\n" + 
-			"									AND (?1 BETWEEN FECHA_INICIAL AND FECHA_FINAL \r\n" + 
-			"									OR ?2 BETWEEN FECHA_INICIAL AND FECHA_FINAL)\r\n" + 
-			"									AND (ID_ESTADO_RESERVA = 2 OR ID_ESTADO_RESERVA = 4)\r\n" + 
+			"									and (?1 between fecha_inicial and fecha_final \r\n" + 
+			"									or ?2 between fecha_inicial and fecha_final)\r\n" + 
+			"									and (id_estado_reserva = 2 or id_estado_reserva = 4)\r\n" + 
 			"									group by dr.id_habitacion)\r\n" + 
 			"and capacidad_habitacion >=  ?3", nativeQuery = true)
 	Integer findIndividualAvailability(String dateInit, String dateEnd, int bed);
 	
 	@Query(value = "select fecha_inicial inicial, fecha_final final, nombre_estado_reserva estado, nombre_tipo_reserva tipo, numero_camas_reserva camas, \r\n" + 
 			"case when r.id_tipo_reserva = 1 then\r\n" + 
-			"(precio_tipo_reserva * capacidad_habitacion) * DATEDIFF(fecha_final, fecha_inicial)\r\n" + 
+			"(precio_tipo_reserva * capacidad_habitacion) * datediff(fecha_final, fecha_inicial)\r\n" + 
 			"else \r\n" + 
-			"(precio_tipo_reserva * r.numero_camas_reserva) * DATEDIFF(fecha_final, fecha_inicial)\r\n" + 
+			"(precio_tipo_reserva * r.numero_camas_reserva) * datediff(fecha_final, fecha_inicial)\r\n" + 
 			"end importe\r\n" + 
 			"from reservas r, detalle_reserva d, estados_reserva e, tipos_reserva t, habitaciones h\r\n" + 
 			"where id_cliente = ?1\r\n" + 
@@ -158,22 +158,22 @@ public interface ReservaRepository extends JpaRepository<Reserve, Integer> {
 			"from (select sum(capacidad_habitacion) disponibles\r\n" + 
 			"	  from habitaciones \r\n" + 
 			"      where id_habitacion not in (select h.id_habitacion\r\n" + 
-			"									FROM RESERVAS R, DETALLE_RESERVA DR, habitaciones h\r\n" + 
-			"									WHERE R.ID_RESERVA = DR.ID_RESERVA\r\n" + 
+			"									from reservas r, detalle_reserva dr, habitaciones h\r\n" + 
+			"									where r.id_reserva = dr.id_reserva\r\n" + 
 			"                                    and dr.id_habitacion = h.id_habitacion\r\n" + 
-			"									AND (?1 BETWEEN FECHA_INICIAL AND FECHA_FINAL \r\n" + 
-			"									OR ?2 FECHA_INICIAL AND FECHA_FINAL)\r\n" + 
-			"									AND (ID_ESTADO_RESERVA = 2 OR ID_ESTADO_RESERVA = 4))) x,\r\n" + 
-			"		(SELECT sum(case \r\n" + 
+			"									and (?1 between fecha_inicial and fecha_final \r\n" + 
+			"									or ?2 fecha_inicial and fecha_final)\r\n" + 
+			"									and (id_estado_reserva = 2 or id_estado_reserva = 4))) x,\r\n" + 
+			"		(select sum(case \r\n" + 
 			"when id_tipo_reserva = 1 then 0\r\n" + 
 			"else (capacidad_habitacion-numero_camas_reserva) \r\n" + 
 			"end) disponibles\r\n" + 
-			"									FROM RESERVAS R, DETALLE_RESERVA DR, habitaciones h\r\n" + 
-			"									WHERE R.ID_RESERVA = DR.ID_RESERVA\r\n" + 
+			"									from reservas r, detalle_reserva dr, habitaciones h\r\n" + 
+			"									where r.id_reserva = dr.id_reserva\r\n" + 
 			"                                    and dr.id_habitacion = h.id_habitacion\r\n" + 
-			"									AND (?1 BETWEEN FECHA_INICIAL AND FECHA_FINAL \r\n" + 
-			"									OR ?2 BETWEEN FECHA_INICIAL AND FECHA_FINAL)\r\n" + 
-			"									AND (ID_ESTADO_RESERVA = 2 OR ID_ESTADO_RESERVA = 4)) y\r\n" + 
+			"									and (?1 between fecha_inicial and fecha_final \r\n" + 
+			"									or ?2 between fecha_inicial and fecha_final)\r\n" + 
+			"									and (id_estado_reserva = 2 or id_estado_reserva = 4)) y\r\n" + 
 			";", nativeQuery = true)
 	Integer findSharedAvailability(String dateInit, String dateEnd); 
 	
@@ -222,23 +222,26 @@ public interface ReservaRepository extends JpaRepository<Reserve, Integer> {
 	
 	
 	
-	@Query(value = "select case when r.id_tipo_reserva = 1 then\r\n" + 
-			"(precio_tipo_reserva * capacidad_habitacion) * DATEDIFF(fecha_final, fecha_inicial)\r\n" + 
+	@Query(value = "select documento_cliente as documento, concat(c.nombre_cliente, ' ', c.apellido_cliente) as nombres, fecha_reserva, fecha_inicial, fecha_final,\r\n" + 
+			"nombre_tipo_reserva tipo,\r\n" + 
+			"case when r.id_tipo_reserva = 1 then\r\n" + 
+			"(precio_tipo_reserva * capacidad_habitacion) * datediff(fecha_final, fecha_inicial)\r\n" + 
 			"else \r\n" + 
-			"(precio_tipo_reserva * r.numero_camas_reserva) * DATEDIFF(fecha_final, fecha_inicial)\r\n" + 
+			"(precio_tipo_reserva * r.numero_camas_reserva) * datediff(fecha_final, fecha_inicial)\r\n" + 
 			"end importe\r\n" + 
-			"from reservas r, detalle_reserva d, estados_reserva e, tipos_reserva t, habitaciones h\r\n" + 
-			"where r.id_reserva = ?1\r\n" + 
+			"from clientes c, reservas r, tipos_reserva t, detalle_reserva d, habitaciones h\r\n" + 
+			"where c.id_cliente = r.id_cliente\r\n" + 
 			"and r.id_reserva = d.id_reserva\r\n" + 
-			"and r.id_estado_reserva = e.id_estado_reserva\r\n" + 
 			"and r.id_tipo_reserva = t.id_tipo_reserva\r\n" + 
-			"and d.id_habitacion = h.id_habitacion", nativeQuery = true)
+			"and d.id_habitacion = h.id_habitacion\r\n" + 
+			"and id_estado_reserva = 5\r\n" + 
+			"order by fecha_reserva desc", nativeQuery = true)
 	List<Map<String,Object>> findHistoryBill(); 
 	
 	@Query(value = "select case when r.id_tipo_reserva = 1 then\r\n" + 
-			"(precio_tipo_reserva * capacidad_habitacion) * DATEDIFF(fecha_final, fecha_inicial)\r\n" + 
+			"(precio_tipo_reserva * capacidad_habitacion) * datediff(fecha_final, fecha_inicial)\r\n" + 
 			"else \r\n" + 
-			"(precio_tipo_reserva * r.numero_camas_reserva) * DATEDIFF(fecha_final, fecha_inicial)\r\n" + 
+			"(precio_tipo_reserva * r.numero_camas_reserva) * datediff(fecha_final, fecha_inicial)\r\n" + 
 			"end importe\r\n" + 
 			"from reservas r, detalle_reserva d, estados_reserva e, tipos_reserva t, habitaciones h\r\n" + 
 			"where r.id_reserva = ?1\r\n" + 

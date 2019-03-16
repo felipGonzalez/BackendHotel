@@ -152,6 +152,11 @@ public class ReserveController {
 		return reservaService.getCostTotal(idReserve);
 	}
 	
+	
+	
+	
+	
+	
 	/*-----------Servicios pagina --------------------*/
 //	@GetMapping(value="ListSharedAvailableRoom/{id}")
 //	@ResponseBody
@@ -170,6 +175,7 @@ public class ReserveController {
 	@GetMapping(value="listHistoryReserveClient/{id}")
 	@ResponseBody
 	public  List<Map<String,Object>> getReserveUser(@PathVariable int id){
+		
 		return  reservaService.getReserveUser(id);
 	}	
 	
