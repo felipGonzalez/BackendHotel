@@ -59,6 +59,13 @@ public class ReserveController {
 		return reservaService.getAllActually();
 	}
 	
+	@GetMapping(value="billHistory")
+	public List<Map<String,Object>> getFindHistoryBill(){
+		return reservaService.getFindHistoryBill();
+	}
+	
+	
+	
 	@GetMapping(value="reserveNotAssign")
 	public List<Reserve> getReserveNotAssign(){
 		return reservaService.getReserveNotAssign();
@@ -159,16 +166,16 @@ public class ReserveController {
 		return  reservaService.getReserveUser(id);
 	}	
 	
-	@GetMapping(value="individualAvailabilityRoom")
+	@GetMapping(value="individualAvailabilityRoom")  // fuera de servicio
 	@ResponseBody
 	public  int getIndividualAvailability(@RequestParam List<String> date){
-		return reservaService.getIndividualAvailability(date.get(0),date.get(1));
+		return reservaService.getIndividualAvailability(date.get(0),date.get(1),Integer.parseInt(date.get(2)));
 	}	
 	
-	@GetMapping(value="sharedAvailability")
+	@GetMapping(value="sharedAvailability")  // fuera de servicio
 	@ResponseBody
 	public  int getSharedAvailability(@RequestParam List<String> date){
-		return reservaService.getSharedAvailability(date.get(0),date.get(1), Integer.parseInt(date.get(2)));
+		return reservaService.getSharedAvailability(date.get(0),date.get(1));
 	}	
 
 	
@@ -184,14 +191,28 @@ public class ReserveController {
 		System.out.println(reserva.getDeteInput());
 		System.out.println(reserva.getDateOutput());
 		if(reserva.getIdStateReserve() == null) {
-			Bill bill= new Bill(billService.getIdCount(), reserva.getDateReserve());
-			reserva.setIdBill(bill.getId());
-			reserva.setIdStateReserve(1);
-			billService.save(bill);
+			//Bill bill= new Bill(billService.getIdCount(), reserva.getDateReserve());
+			//reserva.setIdBill(bill.getId());
+			//billService.save(bill);
 		}
 		reservaService.save(reserva);
 		return new RestResponse(HttpStatus.OK.value(), "Operacion exitosa");
 	}
+	
+	
+	@PostMapping(value="/factura")
+	public RestResponse createBill(@RequestBody Reserve reserva) {
+		if(reserva.getIdStateReserve() == null) {
+			Bill bill= new Bill(billService.getIdCount(), reserva.getDateReserve());
+			reserva.setIdBill(bill.getId());
+			billService.save(bill);
+			reservaService.save(reserva);
+			return new RestResponse(HttpStatus.OK.value(), "Operacion exitosa");
+		} else {
+			return new RestResponse(HttpStatus.EXPECTATION_FAILED.value(), "Ya se realizo el cobro, ver el historial de facturas");
+		}
+	}
+	
 	
 	@PostMapping(value="/detailReserve")
 	public RestResponse create(@RequestBody DetailReserve detailReserve) {

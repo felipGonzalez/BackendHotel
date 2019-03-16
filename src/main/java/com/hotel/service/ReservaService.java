@@ -95,13 +95,13 @@ public class ReservaService {
 	
 	/*-----------------------------------------------------------------------------------------------------*/
 	/*NUMERO DE CAMAS DISPONIBLES (HAB Individual) EN LA FECHA*/
-	public Integer  getIndividualAvailability(String dateInit, String dateEnd) {
-		return reservaRepository.findIndividualAvailability(dateInit,dateEnd);
+	public Integer  getIndividualAvailability(String dateInit, String dateEnd, int bed) {
+		return reservaRepository.findIndividualAvailability(dateInit,dateEnd,bed);
 	}
 	
 	/*NUMERO DE CAMAS DISPONIBLES (HAB COMPARTIDA) EN LA FECHA pagina*/
-	public Integer  getSharedAvailability(String dateInit, String dateEnd, int bed) {
-		return reservaRepository.findSharedAvailability(dateInit,dateEnd,bed);
+	public Integer  getSharedAvailability(String dateInit, String dateEnd) {
+		return reservaRepository.findSharedAvailability(dateInit,dateEnd);
 	}
 	
 	/*Reservas de un cliente*/
@@ -127,6 +127,12 @@ public class ReservaService {
 	public List<Reserve> getReserveNotAssign() {
 		return reservaRepository.findReserveNotAssign();
 	}	
+	
+	/*Historial de reservas*/
+	public  List<Map<String,Object>>  getFindHistoryBill() {
+		return reservaRepository.findHistoryBill();
+	}
+
 	
 	
 

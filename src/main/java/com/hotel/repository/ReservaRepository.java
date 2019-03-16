@@ -124,25 +124,28 @@ public interface ReservaRepository extends JpaRepository<Reserve, Integer> {
 	List<Map<String,Object>> findHistoryReserveCancel(String dateInit, String dateEnd);
 	
 	/*  NUMERO DE CAMAS DISPONIBLES (HAB INDIVIDUAL) EN LA FECHA pagina */
-	@Query(value = "select count(h.id_habitacion)\r\n" + 
-			"from habitaciones h left outer join (select id_habitacion\r\n" + 
-			"									from reservas r, detalle_reserva dr\r\n" + 
-			"									where r.id_reserva = dr.id_reserva\r\n" + 
-			"									and id_tipo_reserva= 1 or id_tipo_reserva = 2\r\n" + 
-			"									and (?1 between fecha_inicial and fecha_final \r\n" + 
-			"									or ?2 between fecha_inicial and fecha_final)\r\n" + 
-			"									and id_estado_reserva = 1 or id_estado_reserva = 2)x\r\n" + 
-			"on (h.id_habitacion = x.id_habitacion)\r\n" + 
-			"where h.id_estado_habitacion = 1", nativeQuery = true)
-	Integer findIndividualAvailability(String dateInit, String dateEnd);
+	@Query(value = "select count(h.id_habitacion) cantidad \r\n" + 
+			"from habitaciones h \r\n" + 
+			" where h.id_habitacion not in(select dr.id_habitacion\r\n" + 
+			"									FROM RESERVAS R, DETALLE_RESERVA DR, habitaciones h\r\n" + 
+			"									WHERE R.ID_RESERVA = DR.ID_RESERVA\r\n" + 
+			"									and dr.id_habitacion = h.id_habitacion\r\n" + 
+			"									AND (?1 BETWEEN FECHA_INICIAL AND FECHA_FINAL \r\n" + 
+			"									OR ?2 BETWEEN FECHA_INICIAL AND FECHA_FINAL)\r\n" + 
+			"									AND (ID_ESTADO_RESERVA = 2 OR ID_ESTADO_RESERVA = 4)\r\n" + 
+			"									group by dr.id_habitacion)\r\n" + 
+			"and capacidad_habitacion >=  ?3;", nativeQuery = true)
+	Integer findIndividualAvailability(String dateInit, String dateEnd, int bed);
 	
-	@Query(value = "select fecha_inicial inicial, fecha_final final, nombre_estado_reserva estado, numero_camas_reserva camas, \r\n" + 
+	@Query(value = "select fecha_inicial inicial, fecha_final final, nombre_estado_reserva estado, nombre_tipo_reserva tipo, numero_camas_reserva camas, \r\n" + 
 			"case when r.id_tipo_reserva = 1 then\r\n" + 
-			"precio_tipo_reserva\r\n" + 
-			"else precio_tipo_reserva * r.numero_camas_reserva\r\n" + 
+			"precio_tipo_reserva * DATEDIFF(fecha_final, fecha_inicial)\r\n" + 
+			"else \r\n" + 
+			"(precio_tipo_reserva * r.numero_camas_reserva) * DATEDIFF(fecha_final, fecha_inicial)\r\n" + 
 			"end importe\r\n" + 
-			"from reservas r, estados_reserva e, tipos_reserva t\r\n" + 
+			"from reservas r, detalle_reserva d, estados_reserva e, tipos_reserva t\r\n" + 
 			"where id_cliente = ?1\r\n" + 
+			"and r.id_reserva = d.id_reserva\r\n" + 
 			"and r.id_estado_reserva = e.id_estado_reserva\r\n" + 
 			"and r.id_tipo_reserva = t.id_tipo_reserva", nativeQuery = true)
 	List<Map<String,Object>> findReserveUser(int idUser);
@@ -150,25 +153,8 @@ public interface ReservaRepository extends JpaRepository<Reserve, Integer> {
 	
 	
 	/*  NUMERO DE CAMAS DISPONIBLES (compartida) EN LA FECHA pagina */
-	@Query(value = "select (camas_disponibles - camas_ocupadas) camas\r\n" + 
-			"from (\r\n" + 
-			"	(select sum(?3) camas_ocupadas\r\n" + 
-			"	 from reservas r\r\n" + 
-			"	 where ( ?1 between fecha_incial and fecha_final\r\n" + 
-			"	 or ?2 between fecha_incial and fecha_final)\r\n" + 
-			"	 and id_estado_reserva = 1 or id_estado_reserva = 2) y,\r\n" + 
-			"	(select sum(capacidad_habitacion) camas_disponibles\r\n" + 
-			"	from habitaciones h left outer join (select id_habitacion\r\n" + 
-			"										 from reservas r, reservas dr\r\n" + 
-			"										 where r.id_reserva = dr.id_reserva\r\n" + 
-			"										 and id_tipo_reserva= 1\r\n" + 
-			"										 and ( ?1  between fecha_inicial and fecha_final\r\n" + 
-			"										 or ?2 between fecha_inicial and fecha_final)\r\n" + 
-			"										 and id_estado_reserva = 1 or id_estado_reserva = 2)sh\r\n" + 
-			"	on (h.id_habitacion = sh.id_habitacion)                                      \r\n" + 
-			"	where id_estado_habitacion = 1) a\r\n" + 
-			"	)", nativeQuery = true)
-	Integer findSharedAvailability(String dateInit, String dateEnd, int bed); 
+	@Query(value = "", nativeQuery = true)
+	Integer findSharedAvailability(String dateInit, String dateEnd); 
 	
 	 /*   consulta adimn id habitaciones tipo INDIVIDUAL sin reserva en las fechas*/
 	
@@ -211,6 +197,24 @@ public interface ReservaRepository extends JpaRepository<Reserve, Integer> {
 			"", nativeQuery = true)
 	List<Map<String,Object>> findSharedRoomAvailable(String dateInit, String dateEnd); 
 
+	
+	
+	
+	
+	@Query(value = "select documento_cliente as documento, concat(c.nombre_cliente, ' ', c.apellido_cliente) as nombres, fecha_reserva, fecha_inicial, fecha_final,\r\n" + 
+			"	nombre_tipo_reserva tipo,\r\n" + 
+			"	case when r.id_tipo_reserva = 1\r\n" + 
+			"	then precio_tipo_reserva * capacidad_habitacion\r\n" + 
+			"	else precio_tipo_reserva  * numero_camas_reserva\r\n" + 
+			"	end valor\r\n" + 
+			"	from clientes c, reservas r, tipos_reserva t, detalle_reserva d, habitaciones h\r\n" + 
+			"	where c.id_cliente = r.id_cliente\r\n" + 
+			"	and r.id_reserva = d.id_reserva\r\n" + 
+			"	and r.id_tipo_reserva = t.id_tipo_reserva\r\n" + 
+			"	and d.id_habitacion = h.id_habitacion\r\n" + 
+			"	and id_estado_reserva = 5\r\n" + 
+			"	order by fecha_reserva desc;", nativeQuery = true)
+	List<Map<String,Object>> findHistoryBill(); 
 	
 	
 
