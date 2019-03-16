@@ -139,15 +139,16 @@ public interface ReservaRepository extends JpaRepository<Reserve, Integer> {
 	
 	@Query(value = "select fecha_inicial inicial, fecha_final final, nombre_estado_reserva estado, nombre_tipo_reserva tipo, numero_camas_reserva camas, \r\n" + 
 			"case when r.id_tipo_reserva = 1 then\r\n" + 
-			"precio_tipo_reserva * DATEDIFF(fecha_final, fecha_inicial)\r\n" + 
+			"(precio_tipo_reserva * capacidad_habitacion) * DATEDIFF(fecha_final, fecha_inicial)\r\n" + 
 			"else \r\n" + 
 			"(precio_tipo_reserva * r.numero_camas_reserva) * DATEDIFF(fecha_final, fecha_inicial)\r\n" + 
 			"end importe\r\n" + 
-			"from reservas r, detalle_reserva d, estados_reserva e, tipos_reserva t\r\n" + 
+			"from reservas r, detalle_reserva d, estados_reserva e, tipos_reserva t, habitaciones h\r\n" + 
 			"where id_cliente = ?1\r\n" + 
 			"and r.id_reserva = d.id_reserva\r\n" + 
 			"and r.id_estado_reserva = e.id_estado_reserva\r\n" + 
-			"and r.id_tipo_reserva = t.id_tipo_reserva", nativeQuery = true)
+			"and r.id_tipo_reserva = t.id_tipo_reserva\r\n" + 
+			"and d.id_habitacion = h.id_habitacion", nativeQuery = true)
 	List<Map<String,Object>> findReserveUser(int idUser);
 	
 	

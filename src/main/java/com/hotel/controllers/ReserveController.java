@@ -187,30 +187,14 @@ public class ReserveController {
 
 	@PostMapping(value="")
 	public RestResponse create(@RequestBody Reserve reserva) {
-		System.out.println(reserva.getDateReserve());
-		System.out.println(reserva.getDeteInput());
-		System.out.println(reserva.getDateOutput());
-		if(reserva.getIdStateReserve() == null) {
-			//Bill bill= new Bill(billService.getIdCount(), reserva.getDateReserve());
-			//reserva.setIdBill(bill.getId());
-			//billService.save(bill);
-		}
-		reservaService.save(reserva);
-		return new RestResponse(HttpStatus.OK.value(), "Operacion exitosa");
-	}
-	
-	
-	@PostMapping(value="/factura")
-	public RestResponse createBill(@RequestBody Reserve reserva) {
 		if(reserva.getIdStateReserve() == null) {
 			Bill bill= new Bill(billService.getIdCount(), reserva.getDateReserve());
 			reserva.setIdBill(bill.getId());
 			billService.save(bill);
-			reservaService.save(reserva);
-			return new RestResponse(HttpStatus.OK.value(), "Operacion exitosa");
-		} else {
-			return new RestResponse(HttpStatus.EXPECTATION_FAILED.value(), "Ya se realizo el cobro, ver el historial de facturas");
+			reserva.setIdStateReserve(1);
 		}
+		reservaService.save(reserva);
+		return new RestResponse(HttpStatus.OK.value(), "Operacion exitosa");
 	}
 	
 	
