@@ -241,11 +241,11 @@ public interface ReservaRepository extends JpaRepository<Reserve, Integer> {
 			"(precio_tipo_reserva * r.numero_camas_reserva) * DATEDIFF(fecha_final, fecha_inicial)\r\n" + 
 			"end importe\r\n" + 
 			"from reservas r, detalle_reserva d, estados_reserva e, tipos_reserva t, habitaciones h\r\n" + 
-			"where r.id_reserva = @id\r\n" + 
+			"where r.id_reserva = ?1\r\n" + 
 			"and r.id_reserva = d.id_reserva\r\n" + 
 			"and r.id_estado_reserva = e.id_estado_reserva\r\n" + 
 			"and r.id_tipo_reserva = t.id_tipo_reserva\r\n" + 
-			"and d.id_habitacion = h.id_habitacion;", nativeQuery = true)
+			"and d.id_habitacion = h.id_habitacion", nativeQuery = true)
 	Integer findCostTotal(int idReserve); 
 
 }
