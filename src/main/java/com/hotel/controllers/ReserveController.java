@@ -179,7 +179,7 @@ public class ReserveController {
 		try {
 			return reservaService.getIndividualAvailability(date.get(0),date.get(1),Integer.parseInt(date.get(2)));
 		} catch (Exception e) {
-			return 0;
+			return -1;
 		}
 		
 	}	
@@ -187,7 +187,13 @@ public class ReserveController {
 	@GetMapping(value="sharedAvailability") 
 	@ResponseBody
 	public  int getSharedAvailability(@RequestParam List<String> date){
-		return reservaService.getSharedAvailability(date.get(0),date.get(1));
+		try {
+			
+			return reservaService.getSharedAvailability(date.get(0),date.get(1));
+		} catch (Exception e) {
+			return -1;
+		}
+		
 	}
 
 	
