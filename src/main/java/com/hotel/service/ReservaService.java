@@ -99,10 +99,10 @@ public class ReservaService {
 		return reservaRepository.findIndividualAvailability(dateInit,dateEnd,bed);
 	}
 	
-	/*NUMERO DE CAMAS DISPONIBLES (HAB COMPARTIDA) EN LA FECHA pagina*/
+	/*NUMERO DE CAMAS DISPONIBLES (HAB COMPARTIDA) EN LA FECHA pagina
 	public Integer  getSharedAvailability(String dateInit, String dateEnd) {
 		return reservaRepository.findSharedAvailability(dateInit,dateEnd);
-	}
+	}*/
 	
 	/*Reservas de un cliente*/
 	public  List<Map<String,Object>>  getReserveUser(int idUser) {

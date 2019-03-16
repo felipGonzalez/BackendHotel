@@ -172,11 +172,11 @@ public class ReserveController {
 		return reservaService.getIndividualAvailability(date.get(0),date.get(1),Integer.parseInt(date.get(2)));
 	}	
 	
-	@GetMapping(value="sharedAvailability")  // fuera de servicio
+	/*@GetMapping(value="sharedAvailability")  // fuera de servicio
 	@ResponseBody
 	public  int getSharedAvailability(@RequestParam List<String> date){
 		return reservaService.getSharedAvailability(date.get(0),date.get(1));
-	}	
+	}*/	
 
 	
 	

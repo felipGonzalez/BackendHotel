@@ -134,7 +134,7 @@ public interface ReservaRepository extends JpaRepository<Reserve, Integer> {
 			"									OR ?2 BETWEEN FECHA_INICIAL AND FECHA_FINAL)\r\n" + 
 			"									AND (ID_ESTADO_RESERVA = 2 OR ID_ESTADO_RESERVA = 4)\r\n" + 
 			"									group by dr.id_habitacion)\r\n" + 
-			"and capacidad_habitacion >=  ?3;", nativeQuery = true)
+			"and capacidad_habitacion >=  ?3", nativeQuery = true)
 	Integer findIndividualAvailability(String dateInit, String dateEnd, int bed);
 	
 	@Query(value = "select fecha_inicial inicial, fecha_final final, nombre_estado_reserva estado, nombre_tipo_reserva tipo, numero_camas_reserva camas, \r\n" + 
@@ -152,10 +152,10 @@ public interface ReservaRepository extends JpaRepository<Reserve, Integer> {
 	
 	
 	
-	/*  NUMERO DE CAMAS DISPONIBLES (compartida) EN LA FECHA pagina */
+	/*  NUMERO DE CAMAS DISPONIBLES (compartida) EN LA FECHA pagina 
 	@Query(value = "", nativeQuery = true)
 	Integer findSharedAvailability(String dateInit, String dateEnd); 
-	
+	*/
 	 /*   consulta adimn id habitaciones tipo INDIVIDUAL sin reserva en las fechas*/
 	
 	@Query(value = "select h.id_habitacion\r\n" + 
