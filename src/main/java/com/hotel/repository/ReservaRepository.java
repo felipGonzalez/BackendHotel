@@ -34,7 +34,7 @@ public interface ReservaRepository extends JpaRepository<Reserve, Integer> {
 	 Integer findNumClientOutput(); 
 	
 	/*   Numero de huespedes hoy*/
-	@Query(value = "select sum(case when id_tipo_reserva = 1 then 1	else numero_camas_reserva end) AS huespedes "
+	@Query(value = "select sum(numero_camas_reserva) AS huespedes "
 			+ " from reservas "
 			+ "where current_date()"
 			+ " between fecha_inicial and fecha_final "
@@ -42,18 +42,29 @@ public interface ReservaRepository extends JpaRepository<Reserve, Integer> {
 	 Integer findNumberClientsHosted(); 
 	
 	/*   Habitaciones ocupadas   */
-	@Query(value = "select count(distinct id_habitacion)\r\n" + 
+	@Query(value = "select count(distinct id_habitacion) as ocupadas\r\n" + 
 			"from detalle_reserva d, reservas r\r\n" + 
-			"where  r.id_reserva = d.id_reserva\r\n",
-			 nativeQuery = true)
+			"where  r.id_reserva = d.id_reserva\r\n" + 
+			"and current_date() between fecha_inicial and fecha_final\r\n" + 
+			"and r.id_estado_reserva = 3", nativeQuery = true)
 	Integer findOccupiedRoom();
 	
 	/* Entradas hoy*/
-	@Query(value = "select CONCAT(c.nombre_cliente, ' ', c.apellido_cliente) AS nombres, fecha_inicial, fecha_final\r\n" + 
-			"	FROM clientes c, reservas r\r\n" + 
-			"	WHERE r.id_cliente = c.id_cliente\r\n" + 
-			"	AND current_date() = fecha_inicial\r\n" + 
-			"	AND r.id_estado_reserva =2;", nativeQuery = true)
+	@Query(value = "select concat(c.nombre_cliente, ' ', c.apellido_cliente) as nombres,  fecha_inicial, fecha_final, x.importe as importe\r\n" + 
+			"from clientes c, reservas r, (select r.id_reserva,\r\n" + 
+			"							  case when r.id_tipo_reserva = 1\r\n" + 
+			"							  then (precio_tipo_reserva * capacidad_habitacion) * datediff(fecha_final, fecha_inicial)							\r\n" + 
+			"							  else\r\n" + 
+			"							  (precio_tipo_reserva * numero_camas_reserva) * datediff(fecha_final, fecha_inicial)\r\n" + 
+			"							   end importe\r\n" + 
+			"								from reservas r, tipos_reserva t, detalle_reserva d, habitaciones h\r\n" + 
+			"								where r.id_tipo_reserva = t.id_tipo_reserva\r\n" + 
+			"								and r.id_reserva = d.id_reserva\r\n" + 
+			"                                and d.id_habitacion = h.id_habitacion) x\r\n" + 
+			"where r.id_cliente = c.id_cliente\r\n" + 
+			"and current_date() = fecha_inicial\r\n" + 
+			"and r.id_estado_reserva = 2\r\n" + 
+			"and r.id_reserva = x.id_reserva;", nativeQuery = true)
 	List<Map<String,Object>> findUserInput();
 	
 	/* Sin asignar*/
@@ -65,29 +76,37 @@ public interface ReservaRepository extends JpaRepository<Reserve, Integer> {
 	
 	
 	/* salidas hoy */
-	@Query(value = "select concat(c.nombre_cliente, ' ', c.apellido_cliente) as nombres, x.importe as importe, fecha_inicial, fecha_final\r\n" + 
-			"from clientes c, reservas r, (select r.id_reserva, case when r.id_tipo_reserva = 1 then\r\n" + 
-			"								precio_tipo_reserva\r\n" + 
-			"                                else precio_tipo_reserva * r.numero_camas_reserva\r\n" + 
-			"                                end importe\r\n" + 
-			"								from reservas r, tipos_reserva t\r\n" + 
-			"								where r.id_tipo_reserva = t.id_tipo_reserva) x\r\n" + 
+	@Query(value = "select concat(c.nombre_cliente, ' ', c.apellido_cliente) as nombres,  fecha_inicial, fecha_final, x.importe as importe\r\n" + 
+			"from clientes c, reservas r, (select r.id_reserva,\r\n" + 
+			"							  case when r.id_tipo_reserva = 1\r\n" + 
+			"							  then (precio_tipo_reserva * capacidad_habitacion) * datediff(fecha_final, fecha_inicial)							\r\n" + 
+			"							  else\r\n" + 
+			"							  (precio_tipo_reserva * numero_camas_reserva) * datediff(fecha_final, fecha_inicial)\r\n" + 
+			"							   end importe\r\n" + 
+			"								from reservas r, tipos_reserva t, detalle_reserva d, habitaciones h\r\n" + 
+			"								where r.id_tipo_reserva = t.id_tipo_reserva\r\n" + 
+			"								and r.id_reserva = d.id_reserva\r\n" + 
+			"                                and d.id_habitacion = h.id_habitacion) x\r\n" + 
 			"where r.id_cliente = c.id_cliente\r\n" + 
 			"and current_date() = fecha_final\r\n" + 
-			"and r.id_estado_reserva =3\r\n" + 
-			"and r.id_reserva = x.id_reserva;", nativeQuery = true)
+			"and r.id_estado_reserva = 3\r\n" + 
+			"and r.id_reserva = x.id_reserva", nativeQuery = true)
 	List<Map<String,Object>>  findUserOutput(); 
 	
 	
 	/* En estancia hoy*/
 	@Query(value = "select concat(c.nombre_cliente, ' ', c.apellido_cliente) as nombres, x.importe as importe, fecha_inicial, fecha_final\r\n" + 
-			"from clientes c, reservas r, (select r.id_reserva, case when r.id_tipo_reserva = 1 then\r\n" + 
-			"								precio_tipo_reserva\r\n" + 
-			"                                else precio_tipo_reserva * r.numero_camas_reserva\r\n" + 
-			"                                end importe\r\n" + 
-			"								from reservas r, tipos_reserva t\r\n" + 
-			"								where r.id_tipo_reserva = t.id_tipo_reserva) x\r\n" + 
-			"where r.id_cliente = c.id_cliente\r\n" + 
+			"from clientes c, reservas r, (select r.id_reserva, \r\n" + 
+			"							  case when r.id_tipo_reserva = 1\r\n" + 
+			"							  then (precio_tipo_reserva * capacidad_habitacion) * datediff(fecha_final, fecha_inicial)							\r\n" + 
+			"							  else\r\n" + 
+			"							  (precio_tipo_reserva * numero_camas_reserva) * datediff(fecha_final, fecha_inicial)\r\n" + 
+			"							   end importe\r\n" + 
+			"								from reservas r, tipos_reserva t, detalle_reserva d, habitaciones h\r\n" + 
+			"								where r.id_tipo_reserva = t.id_tipo_reserva\r\n" + 
+			"								and r.id_reserva = d.id_reserva\r\n" + 
+			"                                and d.id_habitacion = h.id_habitacion) x\r\n" + 
+			"where c.id_cliente = r.id_cliente\r\n" + 
 			"and r.id_estado_reserva =3\r\n" + 
 			"and r.id_reserva = x.id_reserva", nativeQuery = true)
 	List<Map<String,Object>> findUserEstancia();
@@ -95,32 +114,40 @@ public interface ReservaRepository extends JpaRepository<Reserve, Integer> {
 	
 	/*  Historial realizadas en un rango de fecha */
 	@Query(value = "select concat(c.nombre_cliente, ' ', c.apellido_cliente) as nombres, x.importe as importe, fecha_inicial, fecha_final\r\n" + 
-			"	from clientes c, reservas r, (select r.id_reserva, case when r.id_tipo_reserva = 1 then\r\n" + 
-			"									precio_tipo_reserva\r\n" + 
-			"	                                else precio_tipo_reserva * r.numero_camas_reserva\r\n" + 
-			"	                                end importe\r\n" + 
-			"									from reservas r, tipos_reserva t\r\n" + 
-			"									where r.id_tipo_reserva = t.id_tipo_reserva) x\r\n" + 
-			"	where c.id_cliente = r.id_cliente\r\n" + 
-			"	and (fecha_final between ?1 and ?2\r\n" + 
-			"	or fecha_inicial between ?1 and ?2)\r\n" + 
-			"	and r.id_estado_reserva =5\r\n" + 
-			"	and r.id_reserva = x.id_reserva", nativeQuery = true)
+			"from clientes c, reservas r, (select r.id_reserva,\r\n" + 
+			"							  case when r.id_tipo_reserva = 1\r\n" + 
+			"							  then (precio_tipo_reserva * capacidad_habitacion) * datediff(fecha_final, fecha_inicial)							\r\n" + 
+			"							  else\r\n" + 
+			"							  (precio_tipo_reserva * numero_camas_reserva) * datediff(fecha_final, fecha_inicial)\r\n" + 
+			"							   end importe\r\n" + 
+			"								from reservas r, tipos_reserva t, detalle_reserva d, habitaciones h\r\n" + 
+			"								where r.id_tipo_reserva = t.id_tipo_reserva\r\n" + 
+			"								and r.id_reserva = d.id_reserva\r\n" + 
+			"                                and d.id_habitacion = h.id_habitacion) x\r\n" + 
+			"where c.id_cliente = r.id_cliente\r\n" + 
+			"and (?1 between fecha_inicial and fecha_final\r\n" + 
+			"or ?2 fecha_inicial and fecha_final)\r\n" + 
+			"and r.id_estado_reserva =5\r\n" + 
+			"and r.id_reserva = x.id_reserva", nativeQuery = true)
 	List<Map<String,Object>> findHistoryReserveOk(String dateInit, String dateEnd); 
 
 	/*    Historial canceladas en un rango de fecha   */
 
 	@Query(value = "select concat(c.nombre_cliente, ' ', c.apellido_cliente) as nombres, x.importe as importe,  fecha_inicial, fecha_final\r\n" + 
-			"	from clientes c, reservas r, (select r.id_reserva, case when r.id_tipo_reserva = 1 then\r\n" + 
-			"									precio_tipo_reserva\r\n" + 
-			"	                                else precio_tipo_reserva * r.numero_camas_reserva\r\n" + 
-			"	                                end importe\r\n" + 
-			"									from reservas r, tipos_reserva t\r\n" + 
-			"									where r.id_tipo_reserva = t.id_tipo_reserva) x\r\n" + 
-			"	where c.id_cliente = r.id_cliente\r\n" + 
-			"	and r.id_estado_reserva = 4\r\n" + 
-			"	and fecha_reserva between ?1 and ?2\r\n" + 
-			"	and r.id_reserva = x.id_reserva", nativeQuery = true)
+			"from clientes c, reservas r, (select r.id_reserva, \r\n" + 
+			"							  case when r.id_tipo_reserva = 1\r\n" + 
+			"							  then (precio_tipo_reserva * capacidad_habitacion) * datediff(fecha_final, fecha_inicial)							\r\n" + 
+			"							  else\r\n" + 
+			"							  (precio_tipo_reserva * numero_camas_reserva) * datediff(fecha_final, fecha_inicial)\r\n" + 
+			"							   end importe\r\n" + 
+			"								from reservas r, tipos_reserva t, detalle_reserva d, habitaciones h\r\n" + 
+			"								where r.id_tipo_reserva = t.id_tipo_reserva\r\n" + 
+			"								and r.id_reserva = d.id_reserva\r\n" + 
+			"                                and d.id_habitacion = h.id_habitacion) x\r\n" + 
+			"where c.id_cliente = r.id_cliente\r\n" + 
+			"and r.id_estado_reserva = 4\r\n" + 
+			"and fecha_reserva between ?1 and ?2\r\n" + 
+			"and r.id_reserva = x.id_reserva", nativeQuery = true)
 	List<Map<String,Object>> findHistoryReserveCancel(String dateInit, String dateEnd);
 	
 	/*  NUMERO DE CAMAS DISPONIBLES (HAB INDIVIDUAL) EN LA FECHA pagina */
