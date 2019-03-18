@@ -15,7 +15,7 @@ import com.hotel.util.Const;
 
 @RestController
 @RequestMapping("/loginAdmin")
-@CrossOrigin(origins = Const.DOMAIN)
+@CrossOrigin(origins = {Const.DOMAIN,Const.DOMAIN2,Const.DOMAIN3})
 public class AdminDataController {
 
 	@Autowired
